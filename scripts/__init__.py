@@ -1,8 +1,8 @@
 import subprocess
 
 
-def test():
-    subprocess.run(["python", "-u", "-m", "unittest", "discover"])
+def tests():
+    subprocess.run(["python", "-u", "-m", "unittest", "discover", "tests/"])
 
 
 def lint():
