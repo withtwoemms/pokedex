@@ -7,6 +7,7 @@ authors = ["withtwoemms <withthoemms@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "2.31.0"
+urllib3 = "<=1.26.16"
 
 [tool.poetry.dev-dependencies]
 black = "23.3.0"
