@@ -7,3 +7,8 @@ def tests():
 
 def lint():
     subprocess.run(["pre-commit", "run", "--all-files"])
+
+
+def check():
+    tests()
+    lint()
