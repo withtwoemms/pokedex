@@ -1,9 +1,7 @@
-import json
 from pathlib import Path
 from typing import Dict
 
 from requests.models import Response
-
 
 parentdir = Path(__file__).parent
 
@@ -16,7 +14,7 @@ resource_paths: Dict[str, Path] = {
 
 
 def resource(name: str):
-    return resource_paths[name].open('rb').read()
+    return resource_paths[name].open("rb").read()
 
 
 def craft_response(contents: str, status_code: int):
