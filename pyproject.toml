@@ -19,6 +19,7 @@ pre-commit = "3.3.2"
 [tool.poetry.scripts]
 tests = "scripts:tests"
 lint = "scripts:lint"
+get-pokemon = "pokedex.api.__main__:go"
 
 [build-system]
 requires = ["poetry-core==1.5.0"]
