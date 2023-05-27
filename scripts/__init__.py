@@ -2,7 +2,7 @@ import subprocess
 
 
 def tests():
-    subprocess.run(["python", "-u", "-m", "unittest", "discover", "tests/"])
+    subprocess.run(["python", "-u", "-m", "unittest", "discover", "-t", "."])
 
 
 def lint():
