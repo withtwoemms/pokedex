@@ -1,21 +1,17 @@
 import json
 import sys
 from argparse import ArgumentParser
-from enum import Enum
 
 from pokedex.api.client import get_pokemon_by_type
 
 
-class Choices(Enum):
-    type = "type"
-
-    def __str__(self):
-        return self.value
-
-
 def go(args=sys.argv):
     parser = ArgumentParser(prog="get-pokemon", description="Catch 'em all")
-    parser.add_argument("--by", type=Choices, choices=list(Choices), help="get pokemon by type")
+
+    subparsers = parser.add_subparsers(help='search dimension for fetching pokemon')
+
+    parser_by = subparsers.add_parser('by')
+    parser_by.add_argument("--type", type=str, help="e.g. water, grass, fire")
 
     any_args_given = len(sys.argv) > 1
 
@@ -24,7 +20,7 @@ def go(args=sys.argv):
         sys.exit(1)
 
     args = parser.parse_args()
-    if args.by == Choices.type:
-        for pokemon in get_pokemon_by_type("fairy"):
+    if args.type:
+        for pokemon in get_pokemon_by_type(args.type):
             output = json.dumps(pokemon, indent=4)
             print(output)
