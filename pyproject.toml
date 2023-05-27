@@ -23,5 +23,5 @@ check = "scripts:check"
 get-pokemon = "pokedex.api.__main__:go"
 
 [build-system]
-requires = ["poetry-core==1.5.0"]
+requires = ["poetry-core==1.4.2"]
 build-backend = "poetry.core.masonry.api"
