@@ -55,7 +55,7 @@ def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon
 def get_pokemon_by_type(pokemon_type: str):
     endpoints = get_endpoints(PokeApiRequest(BASE_URL))
     endpoint = select_endpoint("type", endpoints)
-    pokemon_type_refs = select_endpoint("type", endpoint)
-    pokemon_type_request = select_pokemon_type(pokemon_type, pokemon_type_refs)
-    pokemon_refs = get_pokemon_refs(pokemon_type_request)
+    pokemon_type_refs = get_pokemon_type_refs(endpoint)
+    pokemon_refs_request = select_pokemon_type(pokemon_type, pokemon_type_refs)
+    pokemon_refs = get_pokemon_refs(pokemon_refs_request)
     yield from get_pokemon(pokemon_refs)
