@@ -9,7 +9,7 @@ from pokedex.api.models import PokeApiRequest
 from tests.fixtures import craft_response, resource
 
 
-class TestClient(TestCase):
+class TestClientCanGetPokemonByType(TestCase):
     @patch.object(
         PokeApiRequest,
         "__call__",
@@ -20,7 +20,7 @@ class TestClient(TestCase):
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
-    def test_get_pokemon_by_type(self, mock_requests):
+    def test_entrypoint_happy_path(self, mock_requests):
         fairies = get_pokemon_by_type("fairy")
         assert isinstance(fairies, GeneratorType)
 
@@ -37,6 +37,6 @@ class TestClient(TestCase):
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
-    def test_initial_server_error(self, mock_requests):
+    def test_entrypoint_initial_api_call_failure(self, mock_requests):
         with self.assertRaises(HTTPError):
             next(get_pokemon_by_type("fairy"))
