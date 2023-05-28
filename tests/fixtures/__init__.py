@@ -8,6 +8,8 @@ parentdir = Path(__file__).parent
 resource_paths: Dict[str, Path] = {
     "endpoints.response": parentdir / "endpoints.response.json",
     "jigglypuff.response": parentdir / "jigglypuff.response.json",
+    "pokemon.moves.response.1": parentdir / "pokemon.moves.response.1.json",
+    "pokemon.moves.response.2": parentdir / "pokemon.moves.response.2.json",
     "pokemon.refs.fairy.response": parentdir / "pokemon.refs.fairy.response.json",
     "pokemon.types.response": parentdir / "pokemon.types.response.json",
 }
