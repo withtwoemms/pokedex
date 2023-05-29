@@ -59,3 +59,7 @@ def get_pokemon_by_type(pokemon_type: str):
     pokemon_refs_request = select_pokemon_type(pokemon_type, pokemon_type_refs)
     pokemon_refs = get_pokemon_refs(pokemon_refs_request)
     yield from get_pokemon(pokemon_refs)
+
+
+def get_pokemon_by_move(pokemon_move: str) -> Generator[Pokemon, None, None]:
+    raise NotImplementedError
