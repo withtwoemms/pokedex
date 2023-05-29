@@ -22,15 +22,6 @@ def select_endpoint(name: str, endpoints: PokeApiEndpoints) -> PokeApiRequest:
     return PokeApiRequest(endpoints[name])
 
 
-# TODO: generalize this method
-def get_pokemon_type_refs(request: PokeApiRequest) -> PokemonTypeRefs:
-    response: requests.Response = request()
-    response.raise_for_status()  # TODO: handle error states
-    pokemon_type_resource = PokeApiResource(**response.json())
-    pokemon_type_refs: List[PokeApiResourceRef] = pokemon_type_resource.results
-    return pokemon_type_refs
-
-
 def get_resource(request: PokeApiRequest) -> PokeApiResource:
     response: requests.Response = request()
     response.raise_for_status()  # TODO: handle error states
@@ -67,7 +58,7 @@ def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon
 def get_pokemon_by_type(pokemon_type: str):
     endpoints = get_endpoints(PokeApiRequest(BASE_URL))
     endpoint = select_endpoint("type", endpoints)
-    pokemon_type_refs = get_pokemon_type_refs(endpoint)
+    pokemon_type_refs = get_resource(endpoint).results
     pokemon_refs_request = select_pokemon_type(pokemon_type, pokemon_type_refs)
     pokemon_requests = generate_pokemon_requests(pokemon_refs_request, "pokemon")
     yield from get_pokemon(pokemon_requests)
