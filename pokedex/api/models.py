@@ -27,6 +27,9 @@ class PokemonRef(BaseModel):
     pokemon: PokeApiResourceRef
     slot: int
 
+    def to_api_resource_ref(self) -> PokeApiRequest:
+        return self.pokemon
+
     def as_request(self) -> PokeApiRequest:
         return self.pokemon.as_request()
 
@@ -36,3 +39,8 @@ class PokeApiResource(BaseModel):
     next: Optional[str]
     previous: Optional[str]
     results: List[PokeApiResourceRef]
+
+    @property
+    def next_request(self) -> Optional[PokeApiRequest]:
+        if self.next:
+            return PokeApiRequest(self.next)
