@@ -16,7 +16,7 @@ class TestClientCanGetPokemonByType(TestCase):
         side_effect=[
             craft_response(resource("endpoints.response"), status_code=200),
             craft_response(resource("pokemon.types.response"), status_code=200),
-            craft_response(resource("pokemon.refs.fairy.response"), status_code=200),
+            craft_response(resource("pokemon.type.fairy.response"), status_code=200),
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
@@ -33,7 +33,7 @@ class TestClientCanGetPokemonByType(TestCase):
         side_effect=[
             craft_response(resource("endpoints.response"), status_code=500),
             craft_response(resource("pokemon.types.response"), status_code=200),
-            craft_response(resource("pokemon.refs.fairy.response"), status_code=200),
+            craft_response(resource("pokemon.type.fairy.response"), status_code=200),
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
@@ -50,7 +50,7 @@ class TestClientCanGetPokemonByMove(TestCase):
             craft_response(resource("endpoints.response"), status_code=200),
             craft_response(resource("pokemon.moves.response.1"), status_code=200),
             craft_response(resource("pokemon.moves.response.2"), status_code=200),
-            craft_response(resource("pokemon.refs.headbutt.response"), status_code=200),
+            craft_response(resource("pokemon.move.headbutt.response"), status_code=200),
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
@@ -68,7 +68,7 @@ class TestClientCanGetPokemonByMove(TestCase):
             craft_response(resource("endpoints.response"), status_code=500),
             craft_response(resource("pokemon.moves.response.1"), status_code=200),
             craft_response(resource("pokemon.moves.response.2"), status_code=200),
-            craft_response(resource("pokemon.refs.headbutt.response"), status_code=200),
+            craft_response(resource("pokemon.move.headbutt.response"), status_code=200),
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
