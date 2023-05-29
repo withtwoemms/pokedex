@@ -24,6 +24,10 @@ get-pokemon = "pokedex.api.__main__:go"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "5.5"
+black = "23.3.0"
+flake8 = "6.0.0"
+isort = "5.12.0"
+pre-commit = "3.3.2"
 
 [build-system]
 requires = ["poetry-core==1.5.0"]
