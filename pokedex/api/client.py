@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generator, Iterable, List, Optional, Union
+from typing import Any, Dict, Generator, Iterable, List, Optional
 
 import requests
 
@@ -6,8 +6,6 @@ from pokedex.api.constants import BASE_URL
 from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiRequest, PokeApiResourceRef, PokemonRef
 
 PokeApiEndpoints = Dict[str, str]
-PokemonTypeRefs = List[PokeApiResourceRef]
-PokemonTypes = Dict[str, Union[Optional[str], List[Dict[str, str]]]]
 Pokemon = Dict[str, Any]
 
 
@@ -28,13 +26,6 @@ def get_resource(request: PokeApiRequest) -> PokeApiResource:
     return PokeApiResource(**response.json())
 
 
-# TODO: generalize this
-def select_pokemon_type(pokemon_type: str, pokemon_type_refs: PokemonTypeRefs) -> Optional[PokeApiRequest]:
-    for pokemon_type_ref in pokemon_type_refs:
-        if pokemon_type_ref.name == pokemon_type:
-            return pokemon_type_ref.as_request()
-
-
 def generate_pokemon_requests(api_request: PokeApiRequest, response_key: str) -> Generator[PokeApiRequest, None, None]:
     response: requests.Response = api_request()
     response.raise_for_status()  # TODO: handle error states
@@ -53,15 +44,6 @@ def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon
         response: requests.Response = pokemon_request()
         response.raise_for_status()  # TODO: handle error states
         yield response.json()
-
-
-def get_pokemon_by_type(pokemon_type: str):
-    endpoints = get_endpoints(PokeApiRequest(BASE_URL))
-    endpoint = select_endpoint("type", endpoints)
-    pokemon_type_refs = get_resource(endpoint).results
-    pokemon_refs_request = select_pokemon_type(pokemon_type, pokemon_type_refs)
-    pokemon_requests = generate_pokemon_requests(pokemon_refs_request, "pokemon")
-    yield from get_pokemon(pokemon_requests)
 
 
 def search_endpoint(
@@ -94,4 +76,11 @@ def get_pokemon_by_move(pokemon_move: str) -> Generator[Pokemon, None, None]:
     endpoint_request = search_endpoint("move", pokemon_move)
     if endpoint_request:
         pokemon_refs = generate_pokemon_requests(endpoint_request, "learned_by_pokemon")
+        yield from get_pokemon(pokemon_refs)
+
+
+def get_pokemon_by_type(pokemon_type: str):
+    endpoint_request = search_endpoint("type", pokemon_type)
+    if endpoint_request:
+        pokemon_refs = generate_pokemon_requests(endpoint_request, "pokemon")
         yield from get_pokemon(pokemon_refs)
