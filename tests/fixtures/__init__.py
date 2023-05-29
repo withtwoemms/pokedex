@@ -11,6 +11,7 @@ resource_paths: Dict[str, Path] = {
     "pokemon.moves.response.1": parentdir / "pokemon.moves.response.1.json",
     "pokemon.moves.response.2": parentdir / "pokemon.moves.response.2.json",
     "pokemon.refs.fairy.response": parentdir / "pokemon.refs.fairy.response.json",
+    "pokemon.refs.headbutt.response": parentdir / "pokemon.refs.headbutt.response.json",
     "pokemon.types.response": parentdir / "pokemon.types.response.json",
 }
 
