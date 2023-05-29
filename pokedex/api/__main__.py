@@ -8,9 +8,9 @@ from pokedex.api.client import get_pokemon_by_type
 def go(args=sys.argv):
     parser = ArgumentParser(prog="get-pokemon", description="Catch 'em all")
 
-    subparsers = parser.add_subparsers(help='search dimension for fetching pokemon')
+    subparsers = parser.add_subparsers(help="search dimension for fetching pokemon")
 
-    parser_by = subparsers.add_parser('by')
+    parser_by = subparsers.add_parser("by")
     parser_by.add_argument("--type", type=str, help="e.g. water, grass, fire")
 
     any_args_given = len(sys.argv) > 1

@@ -24,3 +24,5 @@ jobs:
         run: poetry run lint
       - name: Run tests
         run: poetry run tests
+      - name: Build coverage report
+        run: poetry run coverage
