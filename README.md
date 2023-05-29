@@ -11,10 +11,11 @@ It can be installed with:
 pip install poetry
 ```
 
-Once installed, scripts can executed using the `run` subcommand:
+Once installed, scripts can executed using the `run` subcommand.
+For example, the following runs tests, coverage, and linting:
 
 ```
-poetry run <script>
+poetry run check
 ```
 
 
