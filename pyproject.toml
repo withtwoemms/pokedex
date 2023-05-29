@@ -22,6 +22,9 @@ lint = "scripts:lint"
 check = "scripts:check"
 get-pokemon = "pokedex.api.__main__:go"
 
+[tool.poetry.group.dev.dependencies]
+coverage = "5.5"
+
 [build-system]
 requires = ["poetry-core==1.5.0"]
 build-backend = "poetry.core.masonry.api"
