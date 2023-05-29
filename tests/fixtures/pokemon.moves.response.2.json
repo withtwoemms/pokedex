@@ -1,0 +1,87 @@
+{
+  "count": 920,
+  "next": null,
+  "previous": "https://pokeapi.co/api/v2/move/?offset=0&limit=20",
+  "results": [
+    {
+      "name": "slam",
+      "url": "https://pokeapi.co/api/v2/move/21/"
+    },
+    {
+      "name": "vine-whip",
+      "url": "https://pokeapi.co/api/v2/move/22/"
+    },
+    {
+      "name": "stomp",
+      "url": "https://pokeapi.co/api/v2/move/23/"
+    },
+    {
+      "name": "double-kick",
+      "url": "https://pokeapi.co/api/v2/move/24/"
+    },
+    {
+      "name": "mega-kick",
+      "url": "https://pokeapi.co/api/v2/move/25/"
+    },
+    {
+      "name": "jump-kick",
+      "url": "https://pokeapi.co/api/v2/move/26/"
+    },
+    {
+      "name": "rolling-kick",
+      "url": "https://pokeapi.co/api/v2/move/27/"
+    },
+    {
+      "name": "sand-attack",
+      "url": "https://pokeapi.co/api/v2/move/28/"
+    },
+    {
+      "name": "headbutt",
+      "url": "https://pokeapi.co/api/v2/move/29/"
+    },
+    {
+      "name": "horn-attack",
+      "url": "https://pokeapi.co/api/v2/move/30/"
+    },
+    {
+      "name": "fury-attack",
+      "url": "https://pokeapi.co/api/v2/move/31/"
+    },
+    {
+      "name": "horn-drill",
+      "url": "https://pokeapi.co/api/v2/move/32/"
+    },
+    {
+      "name": "tackle",
+      "url": "https://pokeapi.co/api/v2/move/33/"
+    },
+    {
+      "name": "body-slam",
+      "url": "https://pokeapi.co/api/v2/move/34/"
+    },
+    {
+      "name": "wrap",
+      "url": "https://pokeapi.co/api/v2/move/35/"
+    },
+    {
+      "name": "take-down",
+      "url": "https://pokeapi.co/api/v2/move/36/"
+    },
+    {
+      "name": "thrash",
+      "url": "https://pokeapi.co/api/v2/move/37/"
+    },
+    {
+      "name": "double-edge",
+      "url": "https://pokeapi.co/api/v2/move/38/"
+    },
+    {
+      "name": "tail-whip",
+      "url": "https://pokeapi.co/api/v2/move/39/"
+    },
+    {
+      "name": "poison-sting",
+      "url": "https://pokeapi.co/api/v2/move/40/"
+    }
+  ]
+}
