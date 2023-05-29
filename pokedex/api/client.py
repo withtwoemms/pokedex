@@ -3,7 +3,7 @@ from typing import Any, Dict, Generator, Iterable, List, Optional
 import requests
 
 from pokedex.api.constants import BASE_URL
-from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiRequest, PokeApiResourceRef, PokemonRef
+from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiResourceRef, PokemonRef
 
 PokeApiEndpoints = Dict[str, str]
 Pokemon = Dict[str, Any]
@@ -47,9 +47,7 @@ def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon
 
 
 def search_endpoint(
-    endpoint_name: str,
-    resource_ref_name: str,
-    api_resource: Optional[PokeApiResource] = None
+    endpoint_name: str, resource_ref_name: str, api_resource: Optional[PokeApiResource] = None
 ) -> Optional[PokeApiRequest]:
     if not api_resource:
         api_resource = fetch(endpoint_name)
