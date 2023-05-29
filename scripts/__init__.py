@@ -25,4 +25,7 @@ def lint():
 
 def check():
     tests()
+    print()
+    coverage()
+    print()
     lint()
