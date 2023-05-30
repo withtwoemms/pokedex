@@ -14,6 +14,10 @@ class PokeApiRequest:
     def __call__(self) -> ApiResponseType:
         return requests.get(self.url)
 
+    @property
+    def __name__(self):
+        return f"{self.__class__.__name__}:{self.url}"
+
 
 class PokeApiResourceRef(BaseModel):
     name: str

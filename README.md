@@ -25,5 +25,7 @@ There exists a `poetry` buildscript called `get-pokemon`.
 It can be invoked like so:
 
 ```
-poetry run get-pokemon
+poetry run get-pokemon by --type ghost
 ```
+
+pipe to `less`
