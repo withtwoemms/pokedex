@@ -1,6 +1,10 @@
 from typing import Any, Dict, Generator, Iterable, List, Optional
+from actionpack import Procedure
 
 import requests
+
+from actionpack.actions import Call
+from actionpack.utils import Closure
 
 from pokedex.api.constants import BASE_URL
 from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiResourceRef, PokemonRef
@@ -38,11 +42,12 @@ def generate_pokemon_requests(api_request: PokeApiRequest, response_key: str) ->
         yield model.as_request()
 
 
-# TODO: make concurrent
 def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon, None, None]:
-    for pokemon_request in pokemon_requests:
-        response: requests.Response = pokemon_request()
-        response.raise_for_status()  # TODO: handle error states
+    calls = (Call(Closure(pokemon_request)) for pokemon_request in pokemon_requests)
+    for result in Procedure(calls).execute(synchronously=False, should_raise=True):
+        # TODO: consider how to proceed if `result.successful => False`
+        # such handling will preclude the need for the `should_raise` option during Procedure execution
+        response: requests.Response = result.value
         yield response.json()
 
 
