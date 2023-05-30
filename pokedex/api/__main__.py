@@ -23,12 +23,8 @@ def go(args=sys.argv):
     args = parser.parse_args()
 
     if args.type:
-        for pokemon in get_pokemon_by_type(args.type):
-            output = json.dumps(pokemon, indent=4)
-            print(output)
+        print(json.dumps(list(get_pokemon_by_type(args.type)), indent=4))
 
     if args.move:
         move = str(args.move).replace(" ", "-")
-        for pokemon in get_pokemon_by_move(move):
-            output = json.dumps(pokemon, indent=4)
-            print(output)
+        print(json.dumps(list(get_pokemon_by_move(move)), indent=4))
