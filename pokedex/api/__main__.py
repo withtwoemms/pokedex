@@ -3,6 +3,7 @@ import sys
 from argparse import ArgumentParser
 
 from pokedex.api.client import get_pokemon_by_move, get_pokemon_by_type
+from pokedex.db.client import persist
 
 
 def go(args=sys.argv):
@@ -23,8 +24,14 @@ def go(args=sys.argv):
     args = parser.parse_args()
 
     if args.type:
-        print(json.dumps(list(get_pokemon_by_type(args.type)), indent=4))
+        # print(json.dumps(list(get_pokemon_by_type(args.type)), indent=4))
+        results = list(persist(get_pokemon_by_type(args.type)))
+        report = {'persisted': dict(results), 'count': len(results)}
+        print(json.dumps(report, indent=4))
 
     if args.move:
         move = str(args.move).replace(" ", "-")
-        print(json.dumps(list(get_pokemon_by_move(move)), indent=4))
+        # print(json.dumps(list(get_pokemon_by_move(move)), indent=4))
+        results = list(persist(get_pokemon_by_move(move)))
+        report = {'persisted': dict(results), 'count': len(results)}
+        print(json.dumps(report, indent=4))

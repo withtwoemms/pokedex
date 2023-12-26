@@ -6,17 +6,18 @@ import requests
 from actionpack.actions import Call
 from actionpack.utils import Closure
 
+from pokedex.api import Pokemon, PokeApiEndpoints
 from pokedex.api.constants import BASE_URL
 from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiResourceRef, PokemonRef
-
-PokeApiEndpoints = Dict[str, str]
-Pokemon = Dict[str, Any]
 
 
 def get_endpoints(endpoints_request: PokeApiRequest) -> PokeApiEndpoints:
     response: requests.Response = endpoints_request()
-    response.raise_for_status()  # TODO: handle error states
+    # response.raise_for_status()  # TODO: handle error states
     endpoints: PokeApiEndpoints = response.json()
+    if isinstance(endpoints, str):
+        print(type(endpoints), endpoints)
+        raise TypeError()
     return endpoints
 
 
@@ -39,7 +40,10 @@ def generate_pokemon_requests(api_request: PokeApiRequest, response_key: str) ->
             model = PokemonRef(**resource_ref).to_api_resource_ref()
         else:
             model = PokeApiResourceRef(**resource_ref)
-        yield model.as_request()
+        request = model.as_request()
+        # print(request)
+        yield request
+        # yield model.as_request()
 
 
 def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon, None, None]:
@@ -72,18 +76,29 @@ def search_endpoint(
 def fetch(endpoint_name: str) -> PokeApiResource:
     endpoints = get_endpoints(PokeApiRequest(BASE_URL))
     endpoint = select_endpoint(endpoint_name, endpoints)
+    # print(endpoint)
     return get_resource(endpoint)
 
 
-def get_pokemon_by_move(pokemon_move: str) -> Generator[Pokemon, None, None]:
+def get_pokemon_by_move(pokemon_move: str) -> Generator[PokeApiRequest, None, None]:
     endpoint_request = search_endpoint("move", pokemon_move)
     if endpoint_request:
-        pokemon_refs = generate_pokemon_requests(endpoint_request, "learned_by_pokemon")
-        yield from get_pokemon(pokemon_refs)
+        # pokemon_requests = generate_pokemon_requests(endpoint_request, "learned_by_pokemon")
+        # yield from get_pokemon(pokemon_requests)
+        yield from generate_pokemon_requests(endpoint_request, "learned_by_pokemon")
+# def get_pokemon_by_move(pokemon_move: str) -> Generator[Pokemon, None, None]:
+#     endpoint_request = search_endpoint("move", pokemon_move)
+#     if endpoint_request:
+#         pokemon_requests = generate_pokemon_requests(endpoint_request, "learned_by_pokemon")
+#         yield from get_pokemon(pokemon_requests)
 
 
-def get_pokemon_by_type(pokemon_type: str):
+def get_pokemon_by_type(pokemon_type: str) -> Generator[PokeApiRequest, None, None]:
     endpoint_request = search_endpoint("type", pokemon_type)
     if endpoint_request:
-        pokemon_refs = generate_pokemon_requests(endpoint_request, "pokemon")
-        yield from get_pokemon(pokemon_refs)
+        yield from generate_pokemon_requests(endpoint_request, "pokemon")
+# def get_pokemon_by_type(pokemon_type: str):
+#     endpoint_request = search_endpoint("type", pokemon_type)
+#     if endpoint_request:
+#         pokemon_requests = generate_pokemon_requests(endpoint_request, "pokemon")
+#         yield from get_pokemon(pokemon_requests)

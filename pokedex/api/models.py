@@ -1,18 +1,37 @@
+import json
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
+# from typing import Any, Dict, List, Optional
 
 import requests
 from pydantic import BaseModel
 
-ApiResponseType = Dict[str, Any]
+# from pokedex.db.client import DbRead, DbInsert
+from pokedex.db.actions import DbRead, DbInsert
+# from pokedex.db.client import CheckKey, DbRead, DbInsert, DbInsertPokemon
+
+
+# ApiResponseType = Dict[str, Any]
 
 
 @dataclass(frozen=True)
 class PokeApiRequest:
     url: str
 
-    def __call__(self) -> ApiResponseType:
-        return requests.get(self.url)
+    def __call__(self) -> requests.Response:
+        cache_result = DbRead(self.url.encode()).perform()
+        if cache_result.successful:
+            response = requests.Response()
+            response._content = cache_result.value
+            response.status_code = 200
+        else:
+            response = requests.get(self.url)
+            response.raise_for_status()  # TODO: handle error states
+            DbInsert(
+                key=self.url,
+                value=json.dumps(response.json()),
+            ).perform(should_raise=True)
+        return response
 
     @property
     def __name__(self):
