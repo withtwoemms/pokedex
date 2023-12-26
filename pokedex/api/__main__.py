@@ -12,7 +12,7 @@ def go(args=sys.argv):
 
     parser_by = subparsers.add_parser("by")
     parser_by.add_argument("--type", type=str, help="e.g. water, grass, fire")
-    parser_by.add_argument("--move", type=str, help='e.g. "water gun", "razor leaf", ember')
+    parser_by.add_argument("--move", type=str, help='e.g. "water-gun", "razor-leaf", ember')
 
     any_args_given = len(sys.argv) > 1
 
