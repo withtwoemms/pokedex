@@ -15,7 +15,7 @@ class DbInsertPokemon(Action):
     pokemon: Pokemon
 
     def instruction(self, db: Optional[str] = None) -> bool:
-        db = db or CACHEPATH
+        db = db or str(CACHEPATH)
         with dbm.open(db, 'c') as cache:  # create db if not exists
             cache[self.name] = json.dumps(self.pokemon, indent=4)  # consider alternative serialization
             return self.pokemon['name']
@@ -30,7 +30,7 @@ class DbInsertRequestResult(Action):
         self.set(name=self.key)
 
     def instruction(self, db: Optional[str] = None) -> bool:
-        db = db or CACHEPATH
+        db = db or str(CACHEPATH)
         response = self.value()
         with dbm.open(db, 'c') as cache:
             cache[self.key] = json.dumps(response.json())
@@ -43,7 +43,7 @@ class DbInsert(Action):
     value: AnyStr
 
     def instruction(self, db: Optional[str] = None) -> str:
-        db = db or CACHEPATH
+        db = db or str(CACHEPATH)
         with dbm.open(db, 'c') as cache:
             cache[self.key] = self.value
             return self.key
@@ -54,6 +54,6 @@ class DbRead(Action[str, bytes]):
     key: bytes
 
     def instruction(self, db: Optional[str] = None) -> bytes:
-        db = db or CACHEPATH
+        db = db or str(CACHEPATH)
         with dbm.open(db, 'c') as cache:  # create db if not exists
             return cache[self.key]
