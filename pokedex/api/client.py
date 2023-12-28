@@ -13,6 +13,7 @@ from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiResourceR
 
 def get_endpoints(endpoints_request: PokeApiRequest) -> PokeApiEndpoints:
     response: requests.Response = endpoints_request()
+    response.raise_for_status()
     endpoints: PokeApiEndpoints = response.json()
     if isinstance(endpoints, str):
         print(type(endpoints), endpoints)

@@ -21,11 +21,12 @@ class TestClientCanGetPokemonByType(TestCase):
         ],
     )
     def test_entrypoint_happy_path(self, mock_requests):
-        fairies = get_pokemon_by_type("fairy")
-        assert isinstance(fairies, GeneratorType)
+        fairy_requests = get_pokemon_by_type("fairy")
+        assert isinstance(fairy_requests, GeneratorType)
 
-        pokemon = next(fairies)
-        assert pokemon["name"] == "jigglypuff"
+        pokemon_request = next(fairy_requests)
+        pokemon_response = pokemon_request()
+        assert pokemon_response.json()["name"] == "jigglypuff"
 
     @patch.object(
         PokeApiRequest,
@@ -55,11 +56,12 @@ class TestClientCanGetPokemonByMove(TestCase):
         ],
     )
     def test_entrypoint_happy_path(self, mock_requests):
-        pounders = get_pokemon_by_move("headbutt")
-        assert isinstance(pounders, GeneratorType)
+        pounder_requests = get_pokemon_by_move("headbutt")
+        assert isinstance(pounder_requests, GeneratorType)
 
-        pokemon = next(pounders)
-        assert pokemon["name"] == "jigglypuff"
+        pokemon_request = next(pounder_requests)
+        pokemon_response = pokemon_request()
+        assert pokemon_response.json()["name"] == "jigglypuff"
 
     @patch.object(
         PokeApiRequest,
