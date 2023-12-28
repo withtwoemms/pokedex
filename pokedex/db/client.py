@@ -1,36 +1,37 @@
-import dbm
 import json
+import requests
+from typing import Iterable
 
-from dataclasses import dataclass
-from typing import Any, Optional
-
-from actionpack import Action, KeyedProcedure, Procedure
+from actionpack import KeyedProcedure
 
 from pokedex.api import Pokemon
-from pokedex.api.models import PokeApiRequest
-from pokedex.constants import CACHEPATH
-from pokedex.db.actions import DbInsertRequestResult, DbInsertPokemon
+from pokedex.db.models import DeferredRequest
+from pokedex.db.actions import DbRead, DbInsert, DbInsertRequestResult, DbInsertPokemon
 
 
-def _persist(*pokemon: Pokemon):
-    # db_inserts = (DbInsert(pk).set(name=pk['name']) for pk in pokemon)
-    db_inserts = (DbInsertPokemon(pk).set(name=pk['id']) for pk in pokemon)
+def persist_pokemon(*pokemon: Pokemon):
+    db_inserts = (DbInsertPokemon(pk).set(name=pk['name']) for pk in pokemon)
     procedure = KeyedProcedure(db_inserts).execute(should_raise=True)
     for key, result in procedure:
         yield key, result.value
 
 
-def persist(*requests: PokeApiRequest):
-# def persist(requests):
-    # db_inserts = (DbInsert(pk).set(name=pk['name']) for pk in pokemon)
-    # print(requests[0])
-    # print(requests)
-    # db_inserts = (DbInsert(key=rq.url, value=rq).set(name=rq.url) for rq in requests)
-
-    db_inserts = (DbInsertRequestResult(key=rq.url, value=rq).set(name=rq.url) for rq in requests)
-    procedure = KeyedProcedure(db_inserts).execute(should_raise=True)
-    # procedure = Procedure(db_inserts).execute(should_raise=True)
-    # for result in procedure:
+def persist_requests(requests: Iterable[DeferredRequest]):
+    db_inserts = (DbInsertRequestResult(key=rq.url, value=rq) for rq in requests)
+    procedure = KeyedProcedure[str, dict](db_inserts).execute(should_raise=True)
     for key, result in procedure:
         yield key, result.value
 
+
+def cached_get(url: str) -> requests.Response:
+    cache_result = DbRead(url.encode()).perform()
+    if cache_result.successful:
+        response = requests.Response()
+        response._content = cache_result.value
+        response.status_code = 200
+    else:
+        response = requests.get(url)
+        response.raise_for_status()  # TODO: handle error states
+        DbInsert(key=url, value=json.dumps(response.json()),
+        ).perform(should_raise=True)
+    return response

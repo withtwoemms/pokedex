@@ -1,17 +1,17 @@
 import dbm
 import json
 from dataclasses import dataclass
-from typing import Optional
+from typing import AnyStr, Optional
 
 from actionpack import Action
 
 from pokedex.api import Pokemon
-from pokedex.api.models import PokeApiRequest
 from pokedex.constants import CACHEPATH
+from pokedex.db.models import DeferredRequest
 
 
 @dataclass
-class DbInsertPokemon(Action[str, str]):
+class DbInsertPokemon(Action):
     pokemon: Pokemon
 
     def instruction(self, db: Optional[str] = None) -> bool:
@@ -23,23 +23,24 @@ class DbInsertPokemon(Action[str, str]):
 
 @dataclass
 class DbInsertRequestResult(Action):
-    key: str
-    value: PokeApiRequest
-    # value: Any  # PokeApiRequest
+    key: AnyStr
+    value: DeferredRequest
 
-    def instruction(self, db: Optional[str] = None) -> str:
+    def __post_init__(self):
+        self.set(name=self.key)
+
+    def instruction(self, db: Optional[str] = None) -> bool:
         db = db or CACHEPATH
-        outcome = self.value().json()
+        response = self.value()
         with dbm.open(db, 'c') as cache:
-            # cache[self.key] = self.value()
-            cache[self.key] = json.dumps(outcome, indent=4)
-            return self.key
+            cache[self.key] = json.dumps(response.json())
+            return True
 
 
 @dataclass
 class DbInsert(Action):
-    key: str
-    value: str
+    key: AnyStr
+    value: AnyStr
 
     def instruction(self, db: Optional[str] = None) -> str:
         db = db or CACHEPATH
@@ -56,40 +57,3 @@ class DbRead(Action[str, bytes]):
         db = db or CACHEPATH
         with dbm.open(db, 'c') as cache:  # create db if not exists
             return cache[self.key]
-
-
-@dataclass
-class CheckKey(Action[str, bool]):
-    key: bytes
-
-    def instruction(self, db: Optional[str] = None) -> bool:
-        db = db or CACHEPATH
-        with dbm.open(db, 'c') as cache:  # create db if not exists
-            return self.key in cache
-
-
-# class DB:
-    
-
-# @dataclass
-# class DbInsert:
-#     pokemon: Pokemon
-
-#     def __call__(self, db: Optional[str] = None) -> Call:
-#         return Call(Closure[bool](self.execute, db=db))
-        
-#     def execute(self, db: Optional[str] = None):
-#         db = db or 'cache'
-#         with dbm.open(db, 'c') as cache:  # create db if not exists
-#             key = self.pokemon['name']
-#             cache[key] = json.dumps(self.pokemon, indent=4)  # consider alternative serialization
-#         return True
-
-
-
-
-# @dataclass
-# class DbInserts:
-#     pokemon: Iterable[Pokemon]
-
-#     def __call__(self, db: Optional[str] = None) -> bool:
