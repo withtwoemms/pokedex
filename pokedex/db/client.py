@@ -9,13 +9,6 @@ from pokedex.db.models import DeferredRequest
 from pokedex.db.actions import DbRead, DbInsert, DbInsertRequestResult, DbInsertPokemon
 
 
-def persist_pokemon(*pokemon: Pokemon):
-    db_inserts = (DbInsertPokemon(pk).set(name=pk['name']) for pk in pokemon)
-    procedure = KeyedProcedure(db_inserts).execute(should_raise=True)
-    for key, result in procedure:
-        yield key, result.value
-
-
 def persist_requests(requests: Iterable[DeferredRequest]):
     db_inserts = (DbInsertRequestResult(key=rq.url, value=rq) for rq in requests)
     procedure = KeyedProcedure[str, dict](db_inserts).execute(should_raise=True)
