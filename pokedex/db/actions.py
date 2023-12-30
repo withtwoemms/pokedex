@@ -5,21 +5,8 @@ from typing import AnyStr, Optional
 
 from actionpack import Action
 
-from pokedex.api import Pokemon
 from pokedex.constants import CACHEPATH
 from pokedex.db.models import DeferredRequest
-
-
-@dataclass
-class DbInsertPokemon(Action):
-    pokemon: Pokemon
-    db: Optional[str] = None
-
-    def instruction(self) -> bool:
-        db = self.db or str(CACHEPATH)
-        with dbm.open(db, 'c') as cache:  # create db if not exists
-            cache[self.name] = json.dumps(self.pokemon, indent=4)  # consider alternative serialization
-            return self.pokemon['name']
 
 
 @dataclass
@@ -33,8 +20,8 @@ class DbInsertRequestResult(Action):
 
     def instruction(self) -> bool:
         db = self.db or str(CACHEPATH)
-        response = self.value()
-        with dbm.open(db, 'c') as cache:
+        response = self.value()  # external call
+        with dbm.open(db, "c") as cache:
             cache[self.key] = json.dumps(response.json())
             return True
 
@@ -47,7 +34,7 @@ class DbInsert(Action):
 
     def instruction(self) -> str:
         db = self.db or str(CACHEPATH)
-        with dbm.open(db, 'c') as cache:
+        with dbm.open(db, "c") as cache:
             cache[self.key] = self.value
             return self.key
 
@@ -59,5 +46,5 @@ class DbRead(Action[str, bytes]):
 
     def instruction(self) -> bytes:
         db = self.db or str(CACHEPATH)
-        with dbm.open(db, 'c') as cache:  # create db if not exists
+        with dbm.open(db, "c") as cache:  # create db if not exists
             return cache[self.key]

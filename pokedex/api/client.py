@@ -1,12 +1,11 @@
 from typing import Generator, Iterable, List, Optional
-from actionpack import Procedure
 
 import requests
-
+from actionpack import Procedure
 from actionpack.actions import Call
 from actionpack.utils import Closure
 
-from pokedex.api import Pokemon, PokeApiEndpoints
+from pokedex.api import PokeApiEndpoints, Pokemon
 from pokedex.api.constants import BASE_URL
 from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiResourceRef, PokemonRef
 
@@ -16,7 +15,6 @@ def get_endpoints(endpoints_request: PokeApiRequest) -> PokeApiEndpoints:
     response.raise_for_status()
     endpoints: PokeApiEndpoints = response.json()
     if isinstance(endpoints, str):
-        print(type(endpoints), endpoints)
         raise TypeError()
     return endpoints
 

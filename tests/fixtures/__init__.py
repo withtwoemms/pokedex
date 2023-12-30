@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Dict, TypeVar
-from unittest.mock import MagicMock, create_autospec
+from unittest.mock import MagicMock
 
 from actionpack.action import Result
 from requests.models import Response
