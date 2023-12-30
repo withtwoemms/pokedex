@@ -1,6 +1,8 @@
 from pathlib import Path
-from typing import Dict
+from typing import Dict, TypeVar
+from unittest.mock import MagicMock, create_autospec
 
+from actionpack.action import Result
 from requests.models import Response
 
 parentdir = Path(__file__).parent
@@ -25,3 +27,13 @@ def craft_response(contents: str, status_code: int):
     response._content = contents
     response.status_code = status_code
     return response
+
+
+T = TypeVar("T")
+
+
+def craft_result(value: T, successful: bool) -> Result:
+    mock_result = MagicMock(spec=Result)
+    mock_result.successful = successful
+    mock_result.value = value
+    return mock_result
