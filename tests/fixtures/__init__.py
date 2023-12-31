@@ -19,7 +19,7 @@ resource_paths: Dict[str, Path] = {
 
 
 def resource(name: str):
-    return resource_paths[name].open("rb").read()
+    return resource_paths[name].read_bytes()
 
 
 def craft_response(contents: str, status_code: int):
