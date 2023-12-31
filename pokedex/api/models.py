@@ -1,18 +1,18 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 import requests
 from pydantic import BaseModel
 
-ApiResponseType = Dict[str, Any]
+from pokedex.db.client import cached_get
 
 
 @dataclass(frozen=True)
 class PokeApiRequest:
     url: str
 
-    def __call__(self) -> ApiResponseType:
-        return requests.get(self.url)
+    def __call__(self) -> requests.Response:
+        return cached_get(self.url)
 
     @property
     def __name__(self):
@@ -31,7 +31,7 @@ class PokemonRef(BaseModel):
     pokemon: PokeApiResourceRef
     slot: int
 
-    def to_api_resource_ref(self) -> PokeApiRequest:
+    def as_api_resource_ref(self) -> PokeApiResourceRef:
         return self.pokemon
 
     def as_request(self) -> PokeApiRequest:

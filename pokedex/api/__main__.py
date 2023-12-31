@@ -1,8 +1,9 @@
-import json
 import sys
 from argparse import ArgumentParser
 
 from pokedex.api.client import get_pokemon_by_move, get_pokemon_by_type
+from pokedex.db.client import persist_requests
+from pokedex.db.models import Report
 
 
 def go(args=sys.argv):
@@ -12,7 +13,7 @@ def go(args=sys.argv):
 
     parser_by = subparsers.add_parser("by")
     parser_by.add_argument("--type", type=str, help="e.g. water, grass, fire")
-    parser_by.add_argument("--move", type=str, help='e.g. "water gun", "razor leaf", ember')
+    parser_by.add_argument("--move", type=str, help='e.g. "water-gun", "razor-leaf", ember')
 
     any_args_given = len(sys.argv) > 1
 
@@ -23,8 +24,10 @@ def go(args=sys.argv):
     args = parser.parse_args()
 
     if args.type:
-        print(json.dumps(list(get_pokemon_by_type(args.type)), indent=4))
+        results = dict(persist_requests(get_pokemon_by_type(args.type)))
+        print(Report(persisted=results))
 
     if args.move:
         move = str(args.move).replace(" ", "-")
-        print(json.dumps(list(get_pokemon_by_move(move)), indent=4))
+        results = dict(persist_requests(get_pokemon_by_move(move)))
+        print(Report(persisted=results))
