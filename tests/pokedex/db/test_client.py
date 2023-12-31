@@ -19,7 +19,7 @@ class TestClientCanCache(TestCase):
             craft_response(resource("jigglypuff.response"), status_code=200),
         ],
     )
-    def test_can_persist_request_(self, mock_request, mock_db_insert):
+    def test_can_persist_request(self, mock_request, mock_db_insert):
         request_url = "https://pokeapi.co/api/v2/pokemon/39/"
         mock_request.url = request_url
         key, response_data = next(persist_requests((mock_request,)))
