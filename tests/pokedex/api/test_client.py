@@ -5,7 +5,7 @@ from unittest.mock import patch
 from requests.exceptions import HTTPError
 
 from pokedex.api.client import get_pokemon, get_pokemon_by_move, get_pokemon_by_type
-from pokedex.api.models import PokeApiRequest
+from pokedex.api.request.implementations.default import PokeApiRequest
 from tests.fixtures import craft_response, resource
 
 

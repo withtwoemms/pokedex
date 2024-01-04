@@ -4,8 +4,8 @@ from typing import Iterable
 import requests
 from actionpack import KeyedProcedure
 
+from pokedex.api.request.protocol import DeferredRequest
 from pokedex.db.actions import DbInsert, DbInsertRequestResult, DbRead
-from pokedex.db.models import DeferredRequest
 
 
 def persist_requests(requests: Iterable[DeferredRequest]):

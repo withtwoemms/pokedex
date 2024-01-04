@@ -5,8 +5,8 @@ from typing import AnyStr, Optional
 
 from actionpack import Action
 
+from pokedex.api.request.protocol import DeferredRequest
 from pokedex.constants import CACHEPATH
-from pokedex.db.models import DeferredRequest
 
 
 @dataclass

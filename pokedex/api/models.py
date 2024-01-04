@@ -1,30 +1,17 @@
-from dataclasses import dataclass
 from typing import List, Optional
 
-import requests
 from pydantic import BaseModel
 
-from pokedex.db.client import cached_get
-
-
-@dataclass(frozen=True)
-class PokeApiRequest:
-    url: str
-
-    def __call__(self) -> requests.Response:
-        return cached_get(self.url)
-
-    @property
-    def __name__(self):
-        return f"{self.__class__.__name__}:{self.url}"
+from pokedex.api.request import ApiRequest
+from pokedex.api.request.protocol import DeferredRequest
 
 
 class PokeApiResourceRef(BaseModel):
     name: str
     url: str
 
-    def as_request(self) -> PokeApiRequest:
-        return PokeApiRequest(self.url)
+    def as_request(self) -> DeferredRequest:
+        return ApiRequest.type()(self.url)
 
 
 class PokemonRef(BaseModel):
@@ -34,7 +21,7 @@ class PokemonRef(BaseModel):
     def as_api_resource_ref(self) -> PokeApiResourceRef:
         return self.pokemon
 
-    def as_request(self) -> PokeApiRequest:
+    def as_request(self) -> DeferredRequest:
         return self.pokemon.as_request()
 
 
@@ -45,6 +32,6 @@ class PokeApiResource(BaseModel):
     results: List[PokeApiResourceRef]
 
     @property
-    def next_request(self) -> Optional[PokeApiRequest]:
+    def next_request(self) -> Optional[DeferredRequest]:
         if self.next:
-            return PokeApiRequest(self.next)
+            return ApiRequest.type()(self.next)

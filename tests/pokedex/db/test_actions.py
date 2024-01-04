@@ -8,7 +8,7 @@ from tests.fixtures import resource
 class TestActions(TestCase):
     @patch("dbm.open")
     def test_can_read_cache(self, mock_kv_open):
-        key = "https://pokeapi.co/api/v2/pokemon/39/"
+        key = "https://pokeapi.co/api/v2/pokemon/18/"
         pokemon_data = resource("jigglypuff.response")
         mock_kv_open.return_value.__enter__.return_value.__getitem__.return_value = pokemon_data
         mock_kv_open.assert_not_called()
