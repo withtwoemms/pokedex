@@ -5,8 +5,13 @@ from actionpack import Procedure
 from actionpack.actions import Call
 from actionpack.utils import Closure
 
-from pokedex.api import PokeApiEndpoints, Pokemon
-from pokedex.api.models import PokeApiResource, PokeApiResourceRef, PokemonRef
+from pokedex.api.models import (
+    Pokemon,
+    PokeApiEndpoints,
+    PokeApiResource,
+    PokeApiResourceRef,
+    PokemonRef,
+)
 from pokedex.api.request import ApiRequest
 from pokedex.api.request.protocol import DeferredRequest
 from pokedex.constants import BASE_URL

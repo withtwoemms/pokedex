@@ -1,9 +1,12 @@
-from typing import List, Optional
-
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 
 from pokedex.api.request import ApiRequest
 from pokedex.api.request.protocol import DeferredRequest
+
+
+Pokemon = Dict[str, Any]
+PokeApiEndpoints = Dict[str, str]
 
 
 class PokeApiResourceRef(BaseModel):
