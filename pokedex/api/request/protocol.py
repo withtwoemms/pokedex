@@ -1,8 +1,9 @@
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from requests import Response
 
 
+@runtime_checkable
 class DeferredRequest(Protocol):
     url: str
 
