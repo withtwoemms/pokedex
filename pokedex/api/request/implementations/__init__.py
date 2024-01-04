@@ -5,7 +5,7 @@ from pokedex.api.request.implementations.cached import CachedPokeApiRequest
 from pokedex.api.request.protocol import DeferredRequest
 
 
-class Request(Enum):
+class ApiRequest(Enum):
     DEFAULT: DeferredRequest = PokeApiRequest
     CACHED: DeferredRequest = CachedPokeApiRequest
 
