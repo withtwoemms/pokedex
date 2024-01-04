@@ -1,6 +1,5 @@
-from pathlib import Path
 from os import environ
-
+from pathlib import Path
 
 PROJECTROOT = Path(__file__).parent.parent.absolute()
 DBROOT = PROJECTROOT / "pokedex" / "db"

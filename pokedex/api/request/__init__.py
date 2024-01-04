@@ -1,7 +1,7 @@
 from enum import Enum
 
-from pokedex.api.request.implementations.default import PokeApiRequest
 from pokedex.api.request.implementations.cached import CachedPokeApiRequest
+from pokedex.api.request.implementations.default import PokeApiRequest
 from pokedex.api.request.protocol import DeferredRequest
 from pokedex.constants import API_REQUEST_IMPL
 

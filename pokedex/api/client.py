@@ -5,17 +5,10 @@ from actionpack import Procedure
 from actionpack.actions import Call
 from actionpack.utils import Closure
 
-from pokedex.api.models import (
-    Pokemon,
-    PokeApiEndpoints,
-    PokeApiResource,
-    PokeApiResourceRef,
-    PokemonRef,
-)
+from pokedex.api.models import PokeApiEndpoints, PokeApiResource, PokeApiResourceRef, Pokemon, PokemonRef
 from pokedex.api.request import ApiRequest
 from pokedex.api.request.protocol import DeferredRequest
 from pokedex.constants import BASE_URL
-
 
 ApiRequestType = ApiRequest.type()
 
@@ -39,7 +32,9 @@ def get_resource(request: DeferredRequest) -> PokeApiResource:
     return PokeApiResource(**response.json())
 
 
-def generate_pokemon_requests(api_request: DeferredRequest, response_key: str) -> Generator[DeferredRequest, None, None]:
+def generate_pokemon_requests(
+    api_request: DeferredRequest, response_key: str
+) -> Generator[DeferredRequest, None, None]:
     response: requests.Response = api_request()
     response.raise_for_status()  # TODO: handle error states
     resource_refs = response.json()[response_key]
