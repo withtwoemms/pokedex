@@ -6,10 +6,10 @@ from actionpack.actions import Call
 from actionpack.utils import Closure
 
 from pokedex.api import PokeApiEndpoints, Pokemon
-from pokedex.api.constants import BASE_URL
 from pokedex.api.models import PokeApiResource, PokeApiResourceRef, PokemonRef
 from pokedex.api.request import ApiRequest
 from pokedex.api.request.protocol import DeferredRequest
+from pokedex.constants import BASE_URL
 
 
 ApiRequestType = ApiRequest.type()
