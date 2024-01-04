@@ -5,12 +5,15 @@ from actionpack import Procedure
 from actionpack.actions import Call
 from actionpack.utils import Closure
 
-from pokedex.api import PokeApiEndpoints, Pokemon
-from pokedex.api.constants import BASE_URL
-from pokedex.api.models import PokeApiRequest, PokeApiResource, PokeApiResourceRef, PokemonRef
+from pokedex.api.models import PokeApiEndpoints, PokeApiResource, PokeApiResourceRef, Pokemon, PokemonRef
+from pokedex.api.request import ApiRequest
+from pokedex.api.request.protocol import DeferredRequest
+from pokedex.constants import BASE_URL
+
+ApiRequestType = ApiRequest.type()
 
 
-def get_endpoints(endpoints_request: PokeApiRequest) -> PokeApiEndpoints:
+def get_endpoints(endpoints_request: DeferredRequest) -> PokeApiEndpoints:
     response: requests.Response = endpoints_request()
     response.raise_for_status()
     endpoints: PokeApiEndpoints = response.json()
@@ -19,17 +22,19 @@ def get_endpoints(endpoints_request: PokeApiRequest) -> PokeApiEndpoints:
     return endpoints
 
 
-def select_endpoint(name: str, endpoints: PokeApiEndpoints) -> PokeApiRequest:
-    return PokeApiRequest(endpoints[name])
+def select_endpoint(name: str, endpoints: PokeApiEndpoints) -> DeferredRequest:
+    return ApiRequestType(endpoints[name])
 
 
-def get_resource(request: PokeApiRequest) -> PokeApiResource:
+def get_resource(request: DeferredRequest) -> PokeApiResource:
     response: requests.Response = request()
     response.raise_for_status()  # TODO: handle error states
     return PokeApiResource(**response.json())
 
 
-def generate_pokemon_requests(api_request: PokeApiRequest, response_key: str) -> Generator[PokeApiRequest, None, None]:
+def generate_pokemon_requests(
+    api_request: DeferredRequest, response_key: str
+) -> Generator[DeferredRequest, None, None]:
     response: requests.Response = api_request()
     response.raise_for_status()  # TODO: handle error states
     resource_refs = response.json()[response_key]
@@ -41,7 +46,7 @@ def generate_pokemon_requests(api_request: PokeApiRequest, response_key: str) ->
         yield model.as_request()
 
 
-def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon, None, None]:
+def get_pokemon(pokemon_requests: Iterable[DeferredRequest]) -> Generator[Pokemon, None, None]:
     calls = (Call(Closure(pokemon_request)) for pokemon_request in pokemon_requests)
     for result in Procedure(calls).execute(synchronously=False, should_raise=True):
         # TODO: consider how to proceed if `result.successful => False`
@@ -52,7 +57,7 @@ def get_pokemon(pokemon_requests: Iterable[PokeApiRequest]) -> Generator[Pokemon
 
 def search_endpoint(
     endpoint_name: str, resource_ref_name: str, api_resource: Optional[PokeApiResource] = None
-) -> Optional[PokeApiRequest]:
+) -> Optional[DeferredRequest]:
     if not api_resource:
         api_resource = fetch(endpoint_name)
 
@@ -68,19 +73,21 @@ def search_endpoint(
         return search_endpoint(endpoint_name, resource_ref_name, new_api_resource)
 
 
+# TODO -- consider passing an `api_request_type: type[DeferredRequest]` param.
+# Doing so would give entrypoints explicit control over implementation selection at runtime.
 def fetch(endpoint_name: str) -> PokeApiResource:
-    endpoints = get_endpoints(PokeApiRequest(BASE_URL))
+    endpoints = get_endpoints(ApiRequestType(BASE_URL))
     endpoint = select_endpoint(endpoint_name, endpoints)
     return get_resource(endpoint)
 
 
-def get_pokemon_by_move(pokemon_move: str) -> Generator[PokeApiRequest, None, None]:
+def get_pokemon_by_move(pokemon_move: str) -> Generator[DeferredRequest, None, None]:
     endpoint_request = search_endpoint("move", pokemon_move)
     if endpoint_request:
         yield from generate_pokemon_requests(endpoint_request, "learned_by_pokemon")
 
 
-def get_pokemon_by_type(pokemon_type: str) -> Generator[PokeApiRequest, None, None]:
+def get_pokemon_by_type(pokemon_type: str) -> Generator[DeferredRequest, None, None]:
     endpoint_request = search_endpoint("type", pokemon_type)
     if endpoint_request:
         yield from generate_pokemon_requests(endpoint_request, "pokemon")

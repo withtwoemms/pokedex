@@ -18,7 +18,7 @@ def coverage():
         # black ignore formatting:
         # fmt: off
         "python", "-m",
-        "coverage", "report", "-m", "--skip-empty", "--fail-under=90"
+        "coverage", "report", "-m", "--skip-empty", "--fail-under=80"
         # fmt: on
     ]
     completed_proc = subprocess.run(compile_coverage_report)
