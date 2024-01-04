@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Type
 
 from pokedex.api.request.implementations.cached import CachedPokeApiRequest
 from pokedex.api.request.implementations.default import PokeApiRequest
@@ -11,5 +12,5 @@ class ApiRequest(Enum):
     CACHED: DeferredRequest = CachedPokeApiRequest
 
     @staticmethod
-    def type() -> type[DeferredRequest]:
+    def type() -> Type[DeferredRequest]:
         return ApiRequest[API_REQUEST_IMPL].value
