@@ -1,33 +1,31 @@
-import sys
-from argparse import ArgumentParser
+import click
 
 from pokedex.api.client import get_pokemon_by_move, get_pokemon_by_type
 from pokedex.db.client import persist_requests
 from pokedex.db.models import Report
 
 
-def go(args=sys.argv):
-    parser = ArgumentParser(prog="get-pokemon", description="Catch 'em all")
+@click.group()
+def cli():
+    pass
 
-    subparsers = parser.add_subparsers(help="search dimension for fetching pokemon")
 
-    parser_by = subparsers.add_parser("by")
-    parser_by.add_argument("--type", type=str, help="e.g. water, grass, fire")
-    parser_by.add_argument("--move", type=str, help='e.g. "water-gun", "razor-leaf", ember')
+@cli.command(no_args_is_help=True)
+@click.option("--type", type=click.STRING, default=False, help="e.g. water, grass, fire")
+@click.option("--move", type=click.STRING, default=False, help="e.g. water-gun, razor-leaf, ember")
+def by(type: str, move: str):
+    """
+    Accepts values by which to fetch Pokemon
 
-    any_args_given = len(sys.argv) > 1
-
-    if not any_args_given:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
-
-    args = parser.parse_args()
-
-    if args.type:
-        results = dict(persist_requests(get_pokemon_by_type(args.type)))
+    TODO: dismiss mutual exclusivity for given options--
+    i.e. `--type` and `--move` should be usable at the same time
+    """
+    if type != "False":
+        results = dict(persist_requests(get_pokemon_by_type(type)))
         print(Report(persisted=results))
+        return
 
-    if args.move:
-        move = str(args.move).replace(" ", "-")
+    if move != "False":
         results = dict(persist_requests(get_pokemon_by_move(move)))
         print(Report(persisted=results))
+        return
