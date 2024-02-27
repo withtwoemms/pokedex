@@ -8,7 +8,7 @@ This project uses [`poetry`](https://python-poetry.org/) as it's build tool.
 It can be installed with:
 
 ```
-pip install poetry
+pip install -r requirements.txt
 ```
 
 This project and its dependencies can be installed with:
