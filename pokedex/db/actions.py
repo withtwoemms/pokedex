@@ -14,6 +14,7 @@ class DbInsertRequestResult(Action):
     key: AnyStr
     value: DeferredRequest
     db: Optional[str] = None
+    metadata: bool = True
 
     def __post_init__(self):
         self.set(name=self.key)
@@ -22,8 +23,9 @@ class DbInsertRequestResult(Action):
         db = self.db or str(CACHEPATH)
         response = self.value()  # external call
         with dbm.open(db, "c") as cache:
-            cache[self.key] = json.dumps(response.json())
-            return True
+            record = response.json()
+            cache[self.key] = json.dumps(record)
+            return True if self.metadata else record
 
 
 @dataclass
