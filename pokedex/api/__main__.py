@@ -13,13 +13,13 @@ def cli():
 @cli.command(no_args_is_help=True)
 @click.option("--type", type=click.STRING, help="e.g. water, grass, fire")
 @click.option("--move", type=click.STRING, help="e.g. water-gun, razor-leaf, ember")
-@click.option("--view-records", is_flag=True, default=False, help="get actual API records or persistence metadata")
+@click.option("--view-records", is_flag=True, default=False, help="get actual API records if flag present")
 def by(type: str, move: str, view_records: bool):
     """
     Accepts values by which to fetch Pokemon
 
-    TODO: dismiss mutual exclusivity for given options--
-    i.e. `--type` and `--move` should be usable at the same time
+    TODO: dismiss mutual exclusivity for given selection options
+    as they, ultimately, should be usable simultaneously for targeted queries
     """
     if type:
         results = dict(persist_requests(get_pokemon_by_type(type), view_records=view_records))
