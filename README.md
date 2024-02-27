@@ -20,7 +20,7 @@ pokedex/api/request/
 Therein, a protocol is defined.
 This protocol definition serves as the structural "template" for how different types of requests can be implemented.
 Implementations have their own module (for clarity) and are "registered" for use outside of the package by the `ApiRequest` enum.
-Environment variables can be used with the console script entrypoint to bind an implementation at runtime(see ["Usage" section](#usage)).
+Environment variables can be used with the console script entrypoint to bind an implementation at runtime(_see ["Usage" section](#usage)_).
 When new implementations have been deployed, choice of implmentation is made as simple as changing the environment.
 
 ### Setup
