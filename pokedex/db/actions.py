@@ -14,7 +14,7 @@ class DbInsertRequestResult(Action):
     key: AnyStr
     value: DeferredRequest
     db: Optional[str] = None
-    metadata: bool = True
+    view_records: bool = False
 
     def __post_init__(self):
         self.set(name=self.key)
@@ -25,7 +25,7 @@ class DbInsertRequestResult(Action):
         with dbm.open(db, "c") as cache:
             record = response.json()
             cache[self.key] = json.dumps(record)
-            return True if self.metadata else record
+            return record if self.view_records else True
 
 
 @dataclass
