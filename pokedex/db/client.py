@@ -8,8 +8,8 @@ from pokedex.api.request.protocol import DeferredRequest
 from pokedex.db.actions import DbInsert, DbInsertRequestResult, DbRead
 
 
-def persist_requests(requests: Iterable[DeferredRequest]):
-    db_inserts = (DbInsertRequestResult(key=rq.url, value=rq) for rq in requests)
+def persist_requests(requests: Iterable[DeferredRequest], view_records=False):
+    db_inserts = (DbInsertRequestResult(key=rq.url, value=rq, view_records=view_records) for rq in requests)
     procedure = KeyedProcedure[str, dict](db_inserts).execute(should_raise=True)
     for key, result in procedure:
         yield key, result.value
