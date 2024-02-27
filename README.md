@@ -23,7 +23,6 @@ Implementations have their own module (for clarity) and are "registered" for use
 Environment variables can be used with the console script entrypoint to bind an implementation at runtime(see ["Usage" section](#usage)).
 When new implementations have been deployed, choice of implmentation is made as simple as changing the environment.
 
-
 ### Setup
 
 This project uses [`poetry`](https://python-poetry.org/) as it's build tool.
@@ -46,7 +45,6 @@ For example, the following runs tests, coverage, and linting:
 poetry run check
 ```
 
-
 ### Usage
 
 There exists a `poetry` buildscript called `get-pokemon`.
@@ -55,5 +53,3 @@ It can be invoked like so:
 ```
 poetry run get-pokemon by --type ghost
 ```
-
-pipe to `less`
