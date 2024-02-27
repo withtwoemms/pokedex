@@ -9,9 +9,10 @@ from pokedex.db.models import Report
 def cli():
     pass
 
+
 @cli.command(no_args_is_help=True)
-@click.option('--type', type=click.STRING, default=False, help="e.g. water, grass, fire")
-@click.option('--move', type=click.STRING, default=False, help="e.g. water-gun, razor-leaf, ember")
+@click.option("--type", type=click.STRING, default=False, help="e.g. water, grass, fire")
+@click.option("--move", type=click.STRING, default=False, help="e.g. water-gun, razor-leaf, ember")
 def by(type: str, move: str):
     """
     Accepts values by which to fetch Pokemon
