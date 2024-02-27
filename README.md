@@ -11,6 +11,12 @@ It can be installed with:
 pip install poetry
 ```
 
+This project and its dependencies can be installed with:
+
+```
+poetry install
+```
+
 Once installed, scripts can executed using the `run` subcommand.
 For example, the following runs tests, coverage, and linting:
 
