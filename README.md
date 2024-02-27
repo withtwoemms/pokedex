@@ -47,9 +47,21 @@ poetry run check
 
 ### Usage
 
-There exists a `poetry` buildscript called `get-pokemon`.
-It can be invoked like so:
+There exists a `poetry` console script called `get-pokemon`.
+It can be invoked like so (and optionally piped to `less`):
 
 ```
 poetry run get-pokemon by --type ghost
+```
+
+Selection of `ApiRequest` implementation can be done using the `API_REQUEST_IMPL` environment variable:
+
+```
+API_REQUEST_IMPL=CACHED poetry run get-pokemon by --move razor-leaf
+```
+
+If you'd like to see the _actual_ API records instead of persistence metadata, use the `--view-records` flag:
+
+```
+API_REQUEST_IMPL=CACHED poetry run get-pokemon by --move razor-leaf --view-records
 ```
