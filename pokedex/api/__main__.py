@@ -25,7 +25,6 @@ def by(type: str, move: str):
         return
 
     if move != "False":
-        move = str(move).replace(" ", "-")
         results = dict(persist_requests(get_pokemon_by_move(move)))
         print(Report(persisted=results))
         return
