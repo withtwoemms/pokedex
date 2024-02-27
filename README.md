@@ -11,7 +11,7 @@ This module relies agnostically on the contents of the `pokedex.api.request` pac
 pokedex/api/request/
 ├── __init__.py
 ├── implementations
-│   ├── __init__.py
+│   ├── __init__.py  <-- Implementation bindings here!
 │   ├── cached.py
 │   ├── default.py
 │   └── ...
