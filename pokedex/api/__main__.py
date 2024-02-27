@@ -29,7 +29,3 @@ def by(type: str, move: str):
         results = dict(persist_requests(get_pokemon_by_move(move)))
         print(Report(persisted=results))
         return
-
-
-def go():
-    return cli()

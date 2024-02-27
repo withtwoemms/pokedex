@@ -23,7 +23,7 @@ tests = "scripts:tests"
 coverage = "scripts:coverage"
 lint = "scripts:lint"
 check = "scripts:check"
-get-pokemon = "pokedex.api.__main__:go"
+get-pokemon = "pokedex.api.__main__:cli"
 
 [build-system]
 requires = ["poetry-core==1.5.0"]
